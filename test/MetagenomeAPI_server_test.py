@@ -91,7 +91,8 @@ class MetagenomeAPITest(unittest.TestCase):
         # stage and build BinnedContigs data
         test_directory_name = 'test_maxbindata'
         cls.test_directory_path = os.path.join(cls.scratch, test_directory_name)
-        os.makedirs(cls.test_directory_path)
+        if not os.path.exists(cls.test_directory_path):
+            os.makedirs(cls.test_directory_path)
         print(os.listdir(cls.test_directory_path))
         for item in os.listdir(os.path.join("data", "MaxBin_Result_Sample")):
             shutil.copy(os.path.join("data", "MaxBin_Result_Sample", item),
@@ -140,8 +141,10 @@ class MetagenomeAPITest(unittest.TestCase):
         with open(json_file) as f:
             data = json.load(f)
         if 'appdev' in self.wsURL:
+            print("Using appdev")
             data['assembly_ref'] = "22385/57/1"
         if 'ci' in self.wsURL:
+            print("Using ci")
             data['assembly_ref'] = "43655/43/1"
         obj_info = self.dfu.save_objects({
             'id': self.getWsID(),
